@@ -36,7 +36,11 @@ filtered_data = data[(data['날짜'] == selected_date) &
 # 결과 출력
 st.subheader("학생 명단")
 if not filtered_data.empty:
-    for _, row in filtered_data.iterrows():
-        st.write(f"{row['학번']} - {row['이름']}")
+    # 연번 추가
+    filtered_data.reset_index(drop=True, inplace=True)
+    filtered_data['연번'] = filtered_data.index + 1  # 인원수 추가
+    filtered_data = filtered_data[['연번', '학번', '이름']]  # 필요한 열만 선택
+
+    st.table(filtered_data)  # 표 형식으로 출력
 else:
     st.write("해당 조건에 맞는 학생이 없습니다.")
