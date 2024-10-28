@@ -27,9 +27,16 @@ dates = sorted(data['요일'].unique()) if '요일' in data.columns else []
 periods = sorted(data['교시'].unique()) if '교시' in data.columns else []
 classes = sorted(data['학급'].unique()) if '학급' in data.columns else []
 
+# 1차 드롭다운: 요일 선택
 selected_date = st.selectbox("요일 선택", dates)
-selected_period = st.selectbox("교시 선택", periods)
-selected_class = st.selectbox("학급 선택", classes)
+
+# 선택한 요일에 맞는 교시 목록 필터링
+filtered_periods = sorted(data[data['요일'] == selected_date]['교시'].unique())
+selected_period = st.selectbox("교시 선택", filtered_periods)
+
+# 선택한 요일과 교시에 맞는 학급 목록 필터링
+filtered_classes = sorted(data[(data['요일'] == selected_date) & (data['교시'] == selected_period)]['학급'].unique())
+selected_class = st.selectbox("학급 선택", filtered_classes)
 
 # 선택한 필터에 맞는 데이터 필터링
 filtered_data = data[(data['요일'] == selected_date) & 
