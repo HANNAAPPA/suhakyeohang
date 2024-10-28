@@ -7,6 +7,10 @@ FILE_URL = 'https://raw.githubusercontent.com/HANNAAPPA/suhakyeohang/main/chulch
 @st.cache_data
 def load_data():
     data = pd.read_excel(FILE_URL)
+    
+    # '학급' 열을 문자열로 강제 변환
+    data['학급'] = data['학급'].astype(str)
+    
     return data.applymap(str)
 
 # Excel 파일 로드
@@ -16,9 +20,9 @@ data = load_data()
 st.title("학생 명단 조회")
 
 # 날짜, 교시, 학급 드롭다운 생성
-dates = sorted(data['날짜'].unique())
-periods = sorted(data['교시'].unique())
-classes = sorted(data['학급'].unique())
+dates = sorted(data['날짜'].unique()) if '날짜' in data.columns else []
+periods = sorted(data['교시'].unique()) if '교시' in data.columns else []
+classes = sorted(data['학급'].unique()) if '학급' in data.columns else []
 
 selected_date = st.selectbox("날짜 선택", dates)
 selected_period = st.selectbox("교시 선택", periods)
@@ -31,5 +35,8 @@ filtered_data = data[(data['날짜'] == selected_date) &
 
 # 결과 출력
 st.subheader("학생 명단")
-for _, row in filtered_data.iterrows():
-    st.write(f"{row['학번']} - {row['이름']}")
+if not filtered_data.empty:
+    for _, row in filtered_data.iterrows():
+        st.write(f"{row['학번']} - {row['이름']}")
+else:
+    st.write("해당 조건에 맞는 학생이 없습니다.")
