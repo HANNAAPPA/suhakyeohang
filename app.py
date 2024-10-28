@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-from datetime import datetime
 
 # GitHub에서 Excel 파일의 Raw URL
 FILE_URL = 'https://raw.githubusercontent.com/HANNAAPPA/suhakyeohang/main/chulcheck.xlsx'
@@ -13,7 +12,7 @@ def load_data():
     data['학급'] = data['학급'].astype(str)
     
     # 날짜 형식을 한글 요일로 변환
-    data['요일'] = pd.to_datetime(data['날짜']).dt.day_name()  # 영어로 요일
+    data['요일'] = pd.to_datetime(data['날짜']).dt.day_name()
     data['요일'] = data['요일'].replace({
         'Monday': '월요일', 
         'Tuesday': '화요일', 
@@ -23,6 +22,9 @@ def load_data():
         'Saturday': '토요일', 
         'Sunday': '일요일'
     })
+    
+    # 날짜에서 시간 제거
+    data['날짜'] = pd.to_datetime(data['날짜']).dt.strftime('%Y-%m-%d')  # 원하는 날짜 형식으로 변경
     
     return data
 
