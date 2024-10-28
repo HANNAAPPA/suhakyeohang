@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # GitHub에서 Excel 파일의 Raw URL
-FILE_URL = 'https://raw.githubusercontent.com/username/repo_name/main/chulcheck.xlsx'
+FILE_URL = 'https://raw.githubusercontent.com/HANNAAPPA/suhakyeohang/main/chulcheck.xlsx'
 
 @st.cache_data
 def load_data():
