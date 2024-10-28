@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # GitHub에서 Excel 파일의 Raw URL
-FILE_URL = 'https://raw.githubusercontent.com/HANNAAPPA/suhakyeohang/main/chulcheck.xlsx'
+FILE_URL = 'https://raw.githubusercontent.com/HANNAAPPA/suhakyeohang/main/chulcheck1.xlsx'
 
 @st.cache_data
 def load_data():
@@ -27,7 +27,7 @@ def load_data():
     })
     
     # 날짜에서 시간 제거
-    data['날짜'] = pd.to_datetime(data['날짜']).dt.strftime('%Y-%m-%d')  # 원하는 날짜 형식으로 변경
+    data['날짜'] = pd.to_datetime(data['날짜']).dt.strftime('%Y-%m-%d')  # 날짜 형식으로 변환
     
     return data
 
