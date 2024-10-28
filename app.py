@@ -7,7 +7,6 @@ FILE_URL = 'https://raw.githubusercontent.com/HANNAAPPA/suhakyeohang/main/chulch
 @st.cache_data
 def load_data():
     data = pd.read_excel(FILE_URL)
-    # 모든 열을 문자열로 변환
     return data.applymap(str)
 
 # Excel 파일 로드
