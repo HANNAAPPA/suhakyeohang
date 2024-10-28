@@ -61,8 +61,8 @@ st.write(f"선택한 날짜: {selected_date} ({korean_weekday})")
 
 # 선택한 날짜에 맞는 교시 목록 필터링
 filtered_periods = sorted(data[data['날짜'] == selected_date]['교시'].unique())
-st.write("필터링된 교시 목록:", filtered_periods)  # 필터링된 교시 목록을 출력하여 확인
 
+# 2차 드롭다운: 교시 선택
 selected_period = st.selectbox("교시 선택", filtered_periods)
 
 # 선택한 날짜와 교시에 맞는 학급 목록 필터링
