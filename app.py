@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from datetime import datetime
 
 # GitHub에서 Excel 파일의 Raw URL
 FILE_URL = 'https://raw.githubusercontent.com/HANNAAPPA/suhakyeohang/main/chulcheck.xlsx'
@@ -11,10 +12,19 @@ def load_data():
     # '학급' 열을 문자열로 강제 변환
     data['학급'] = data['학급'].astype(str)
     
-    # 날짜 형식을 요일로 변환
-    data['요일'] = pd.to_datetime(data['날짜']).dt.day_name()
+    # 날짜 형식을 한글 요일로 변환
+    data['요일'] = pd.to_datetime(data['날짜']).dt.day_name()  # 영어로 요일
+    data['요일'] = data['요일'].replace({
+        'Monday': '월요일', 
+        'Tuesday': '화요일', 
+        'Wednesday': '수요일', 
+        'Thursday': '목요일', 
+        'Friday': '금요일', 
+        'Saturday': '토요일', 
+        'Sunday': '일요일'
+    })
     
-    return data.applymap(str)
+    return data
 
 # Excel 파일 로드
 data = load_data()
@@ -23,23 +33,37 @@ data = load_data()
 st.title("학생 명단 조회")
 
 # 날짜, 교시, 학급 드롭다운 생성
-dates = sorted(data['요일'].unique()) if '요일' in data.columns else []
+dates = sorted(data['날짜'].unique()) if '날짜' in data.columns else []
 periods = sorted(data['교시'].unique()) if '교시' in data.columns else []
 classes = sorted(data['학급'].unique()) if '학급' in data.columns else []
 
-# 1차 드롭다운: 요일 선택
-selected_date = st.selectbox("요일 선택", dates)
+# 1차 드롭다운: 날짜 선택
+selected_date = st.selectbox("날짜 선택", dates)
 
-# 선택한 요일에 맞는 교시 목록 필터링
-filtered_periods = sorted(data[data['요일'] == selected_date]['교시'].unique())
+# 선택한 날짜에 해당하는 요일 얻기
+selected_weekday = pd.to_datetime(selected_date).day_name()
+korean_weekday = {
+    'Monday': '월요일', 
+    'Tuesday': '화요일', 
+    'Wednesday': '수요일', 
+    'Thursday': '목요일', 
+    'Friday': '금요일', 
+    'Saturday': '토요일', 
+    'Sunday': '일요일'
+}[selected_weekday]
+
+st.write(f"선택한 날짜: {selected_date} ({korean_weekday})")
+
+# 선택한 날짜에 맞는 교시 목록 필터링
+filtered_periods = sorted(data[data['날짜'] == selected_date]['교시'].unique())
 selected_period = st.selectbox("교시 선택", filtered_periods)
 
-# 선택한 요일과 교시에 맞는 학급 목록 필터링
-filtered_classes = sorted(data[(data['요일'] == selected_date) & (data['교시'] == selected_period)]['학급'].unique())
+# 선택한 날짜와 교시에 맞는 학급 목록 필터링
+filtered_classes = sorted(data[(data['날짜'] == selected_date) & (data['교시'] == selected_period)]['학급'].unique())
 selected_class = st.selectbox("학급 선택", filtered_classes)
 
 # 선택한 필터에 맞는 데이터 필터링
-filtered_data = data[(data['요일'] == selected_date) & 
+filtered_data = data[(data['날짜'] == selected_date) & 
                      (data['교시'] == selected_period) & 
                      (data['학급'] == selected_class)]
 
