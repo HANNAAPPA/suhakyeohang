@@ -51,7 +51,7 @@ if not filtered_data.empty:
     filtered_data['연번'] = filtered_data.index + 1  # 인원수 추가
     filtered_data = filtered_data[['연번', '학번', '이름']]  # 필요한 열만 선택
 
-    # 인덱스 없이 표 형식으로 출력
-    st.table(filtered_data.style.hide_index())  # 인덱스 숨기기
+    # 데이터프레임을 Streamlit에 표시
+    st.dataframe(filtered_data, use_container_width=True)  # 인덱스 숨기기
 else:
     st.write("해당 조건에 맞는 학생이 없습니다.")
