@@ -11,6 +11,9 @@ def load_data():
     # '학급' 열을 문자열로 강제 변환
     data['학급'] = data['학급'].astype(str)
     
+    # '학번' 열을 문자열로 강제 변환
+    data['학번'] = data['학번'].astype(str)
+    
     # 날짜 형식을 한글 요일로 변환
     data['요일'] = pd.to_datetime(data['날짜']).dt.day_name()
     data['요일'] = data['요일'].replace({
